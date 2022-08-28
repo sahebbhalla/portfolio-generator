@@ -1,7 +1,7 @@
 const inquirer = require("inquirer");
 const fs =require("fs");
 const generatePage = require('./src/page-tempalte.js');
-
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 const promptUser = () => {
   return inquirer.prompt([
     {
@@ -144,16 +144,38 @@ Add a New Project
 
   });
 };
+// const writeFile = pageHTML =>{
+//   fs.writeFile('./dist/index.html', pageHTML, err => {
+//     if (err) throw err;
 
+//     console.log('Portfolio complete! Check out index.html to see the output!');
+
+//   });
+// }
+// const copyFile = ()=>{
+//   fs.copyFile('./src/style.css', './dist/style.css', err => {
+//     if (err) {
+//       console.log(err);
+//       return;
+//     }
+//     console.log('Style sheet copied successfully!');
+//   });
+// }
 promptUser()
 .then(promptProject)
 .then(portfolioData =>{
-  
-const pageHTML = generatePage(portfolioData);
-
-fs.writeFile('index.html', pageHTML, err => {
-    if (err) throw err;
-
-    console.log('Portfolio complete! Check out index.html to see the output!');
-  });
-});
+  return generatePage(portfolioData);
+})
+.then(pageHTML=>{
+  return writeFile(pageHTML)
+})
+.then(writeFileResponse=>{
+  console.log(writeFileResponse);
+  return copyFile('./src/style.css', './dist/style.css');
+})
+.then(copyFileResponse=>{
+  console.log(copyFileResponse)
+})
+.catch(err=>{
+  console.log(err);
+})

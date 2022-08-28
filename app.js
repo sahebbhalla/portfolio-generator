@@ -42,10 +42,32 @@ const promptUser = () => {
       name: "about",
       message: "Provide some information about yourself:",
     },
+    {
+      type: 'confirm',
+      name: 'confirmAbout',
+      message: 'Would you like to enter some information about yourself for an "About" section?',
+      default: true
+    },
+    {
+      type: 'input',
+      name: 'about',
+      message: 'Provide some information about yourself:',
+      when: (answers) => {
+        console.log("we got here");
+        if (answers.confirmAbout) {
+          console.log("we got here T");
+          return true;
+        } else {
+          console.log("we got here F");
+          return false;
+        }
+      }
+    }
   ]);
 };
 const promptProject = (portfolioData) => {
-  !portfolioData.projects ? portfolioData.projects=[] : 
+  if(!portfolioData.projects){
+    portfolioData.projects=[] } 
 
   console.log(`
 =================
